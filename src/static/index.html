@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
+  Username
+  <input type="text" class="type" id="username" name="username">
+  <br>
+  Password
+  <input type="password" class="type" id="password" name="password">
+  <br>
+  <input type="submit" class="type" id="submit" onclick="handleClick()" >
+
+  <h1 id= "message"></h1>
+
+  <script>
+
+    function handleClick(e) {
+      const username = document.getElementById('username').value
+      const password = document.getElementById('password').value
+      const body = {username:username, password: password}
+      fetch('http://127.0.0.1:3000/user/signin',
+      { body: JSON.stringify(body), method: 'POST', headers: {'Content-Type': 'application/json'} },
+      )
+      .then(res => {
+        if(res.status !== 200) {throw new Error('Invalid username or password')}
+        return res.json()
+      })
+      .then(json => {
+        if(json.success)
+          document.getElementById('message').innerText = "You have successfully logged in "  + username;
+      })
+      .catch(err=> {
+        document.getElementById('message').innerText = err.message
+      })
+    }
+      
+  </script>
+</body>
+</html>
